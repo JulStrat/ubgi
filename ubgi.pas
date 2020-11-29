@@ -829,6 +829,39 @@ function TextWidth(
   textString: PAnsiChar): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'textwidth';
 
+(******************)
+(* SDL extensions *)
+(******************)
+
+(* Screen and Windows functions *)
+
+(*
+  Updates the screen contents, i.e. displays all graphics.
+*)
+procedure Refresh();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'refresh';
+
+(*
+  Triggers automatic screen refresh.
+  Note: it may not work on some graphics cards.
+*)  
+procedure SdlBgiAuto();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgiauto';
+
+(* 
+  Triggers “fast mode” even if the graphics system was opened with initgraph().
+  Calling refresh() is needed to display graphics.
+*)  
+procedure SdlBgiFast();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgifast';
+
+(* 
+  Triggers “slow mode” even if the graphics system was opened with initwindow().
+  Calling refresh() is not needed.
+*)
+procedure SdlBgiSlow();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgislow';
+
 (*
 procedure ReadImageFile(
   fileName: PAnsiChar;
@@ -865,8 +898,7 @@ implementation
 
 function KeyPressed(): Boolean;
 begin
-  if KbHit() <> 0 then Result := True
-  else Result := False;
+  Result := KbHit() <> 0;
 end;
 
 procedure OutText(
