@@ -37,7 +37,7 @@ unit ubgi;
 interface
 
 const
-  {$IF Defined(WIN64)}
+  {$IF Defined(MSWINDOWS)}
     LIB_UBGI = 'SDL_bgi.dll';
     LIB_FNPFX = '';
   {$ELSE}
@@ -842,6 +842,21 @@ procedure Refresh();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'refresh';
 
 (*
+*)
+procedure InitWindow(width, height: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'initwindow';
+
+(*
+*)  
+procedure SetWinOptions(title: PAnsiChar; x, y: Integer; flags: Uint32);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setwinoptions';
+
+(*
+*)  
+procedure SetWinTitle(id: Integer; title: PAnsiChar);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setwintitle';
+
+(*
   Triggers automatic screen refresh.
   Note: it may not work on some graphics cards.
 *)  
@@ -862,7 +877,16 @@ procedure SdlBgiFast();
 procedure SdlBgiSlow();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgislow';
 
-(*
+function COLOR(r, g, b: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR';
+
+procedure ShowErrorBox (msg: PAnsiChar);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'showerrorbox';
+  
+procedure ShowInfoBox (msg: PAnsiChar);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'showinfobox';
+
+
 procedure ReadImageFile(
   fileName: PAnsiChar;
   left, top: Integer;
@@ -874,7 +898,6 @@ procedure WriteImageFile(
   left, top: Integer;
   right, bottom: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'writeimagefile';
-*)
 
 (* Not graphical *)
 function KbHit(): Integer;

@@ -44,6 +44,7 @@ Embarcadero Delphi compiler -
 ```
 dcc64 -B -U../ fonts.pas
 ```
-## Screenshot
+## Screenshots
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/fonts.png">
+<img src="https://github.com/JulStrat/ubgi/blob/master/examples/plasma.png">
