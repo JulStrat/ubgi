@@ -21,6 +21,8 @@
 
 program fonts;
 {$IF Defined(FPC)}{$MODE Delphi}{$ENDIF}
+{$APPTYPE Console}
+
 uses ubgi;
 
 procedure message(x, y: Integer; str: PAnsiChar);

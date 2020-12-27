@@ -2,7 +2,7 @@
   ubgi - Object Pascal bindings for SDL_bgi library.@br
   Copyright (C) 2020 I. Kakoulidis, <ioulianos.kakoulidis@hotmail.com>@br
   https://github.com/JulStrat/ubgi
-  
+
   SDL_bgi - Borland Graphics Library implementation based on SDL2.@br
   Copyright (C) 2014-2020 Guido Gonzato, PhD <guido.gonzato@gmail.com>@br
   http://libxbgi.sourceforge.net/
@@ -47,24 +47,24 @@ const
 const
   NOPE = 0;
   EAH = 1;
-  
+
 const
   SDL_BGI_VERSION = '2.4.1';
-  UBGI_VERSION = '0.1.0';
-  
+  UBGI_VERSION = '0.2.0';
+
   BGI_WINTITLE_LEN = 512;
   (* number of concurrent windows that can be created *)
   NUM_BGI_WIN = 16;
   (* available visual pages *)
   VPAGES = 4;
-  PALETTE_SIZE = 4096;  
+  PALETTE_SIZE = 4096;
 
 (* mouse handling *)
 const
   SDL_BUTTON_LEFT = 1;
   SDL_BUTTON_MIDDLE = 2;
   SDL_BUTTON_RIGHT = 3;
-  SDL_MOUSEMOTION = $400;  
+  SDL_MOUSEMOTION = $400;
   SDL_MOUSEWHEEL = SDL_MOUSEMOTION + 3;
   SDL_USEREVENT = $8000;
 
@@ -139,7 +139,7 @@ const
 
   KEY_KP_MINUS = SDLK_KP_MINUS;
   KEY_KP_PLUS = SDLK_KP_PLUS;
-  
+
   KEY_F1 = SDLK_F1;
   KEY_F2 = SDLK_F2;
   KEY_F3 = SDLK_F3;
@@ -152,7 +152,7 @@ const
   KEY_F10 = SDLK_F10;
   KEY_F11 = SDLK_F11;
   KEY_F12 = SDLK_F12;
-  
+
   KEY_CAPSLOCK = SDLK_CAPSLOCK;
   KEY_LEFT_CTRL = SDLK_LCTRL;
   KEY_RIGHT_CTRL = SDLK_RCTRL;
@@ -174,87 +174,87 @@ const
 
 (* BGI fonts *)
 const
-    DefaultFont = 0;
-    TriplexFont = 1;
-    SmallFont = 2;
-    SansSerifFont = 3;
-    GothicFont = 4;
-    ScriptFont = 5;
-    SimplexFont = 6;
-    TriplexScrFont = 7;
-    ComplexFont = 8;
-    EuropeanFont = 9;
-    BoldFont = 10;
-    LastSpecFont = 11;
+  DefaultFont = 0;
+  TriplexFont = 1;
+  SmallFont = 2;
+  SansSerifFont = 3;
+  GothicFont = 4;
+  ScriptFont = 5;
+  SimplexFont = 6;
+  TriplexScrFont = 7;
+  ComplexFont = 8;
+  EuropeanFont = 9;
+  BoldFont = 10;
+  LastSpecFont = 11;
 
 const
-    HorizDir = 0;
-    VertDir = 1;
+  HorizDir = 0;
+  VertDir = 1;
 
 const
-    UserCharSize = 0;
+  UserCharSize = 0;
 
 const
-    LeftText = 0;
-    CenterText = 1;
-    RightText = 2;
+  LeftText = 0;
+  CenterText = 1;
+  RightText = 2;
 
-    BottomText = 0;
-    TopText = 2;
+  BottomText = 0;
+  TopText = 2;
 
 (* BGI colours *)
 const
-    Black = 0;
-    Blue = 1;
-    Green = 2;
-    Cyan = 3;
-    Red = 4;
-    Magenta = 5;
-    Brown = 6;
-    LightGray = 7;
-    DarkGray = 8;
-    LightBlue = 9;
-    LightGreen = 10;
-    LightCyan = 11;
-    LightRed = 12;
-    LightMagenta = 13;
-    Yellow = 14;
-    White = 15;
-    MaxColors = 15;
-    // Blink = 128;
+  Black = 0;
+  Blue = 1;
+  Green = 2;
+  Cyan = 3;
+  Red = 4;
+  Magenta = 5;
+  Brown = 6;
+  LightGray = 7;
+  DarkGray = 8;
+  LightBlue = 9;
+  LightGreen = 10;
+  LightCyan = 11;
+  LightRed = 12;
+  LightMagenta = 13;
+  Yellow = 14;
+  White = 15;
+  MaxColors = 15;
+  // Blink = 128;
 
 (* line style, thickness, and drawing mode *)
 const
-    NormWidth = 1;
-    ThickWidth = 3;
+  NormWidth = 1;
+  ThickWidth = 3;
 
-    SolidLn = 0;
-    DottedLn = 1;
-    CenterLn = 2;
-    DashedLn = 3;
-    UserBitLn = 4;
+  SolidLn = 0;
+  DottedLn = 1;
+  CenterLn = 2;
+  DashedLn = 3;
+  UserBitLn = 4;
 
-    CopyPut = 0;
-    XorPut = 1;
-    OrPut = 2;
-    AndPut = 3;
-    NotPut = 4;
+  CopyPut = 0;
+  XorPut = 1;
+  OrPut = 2;
+  AndPut = 3;
+  NotPut = 4;
 
 (* fill styles *)
-const 
-    EmptyFill = 0;
-    SolidFill = 1;
-    LineFill = 2;
-    LtSlashFill = 3;
-    SlashFill = 4;
-    BkSlashFill = 5;
-    LtBkSlashFill = 6;
-    HatchFill = 7;
-    XHatchFill = 8;
-    InterleaveFill = 9;
-    WideDotFill = 10;
-    CloseDotFill = 11;
-    UserFill = 12;
+const
+  EmptyFill = 0;
+  SolidFill = 1;
+  LineFill = 2;
+  LtSlashFill = 3;
+  SlashFill = 4;
+  BkSlashFill = 5;
+  LtBkSlashFill = 6;
+  HatchFill = 7;
+  XHatchFill = 8;
+  InterleaveFill = 9;
+  WideDotFill = 10;
+  CloseDotFill = 11;
+  UserFill = 12;
 
 (* graphics modes. Expanded from the original GRAPHICS.H *)
 const
@@ -291,8 +291,8 @@ const
   SDL_USER = 12; SDL_FULLSCREEN = 13;
 
 (*
-// libXbgi compatibility  
-const  
+// libXbgi compatibility
+const
   X11_CGALO = SDL_CGALO;
   X11_CGAHI = SDL_CGAHI;
   X11_EGA = SDL_EGA;
@@ -324,7 +324,7 @@ const
 const
   ClipOn = True;
   ClipOff = False;
-  
+
 type
   (* Forward declarations *)
   PPointType = ^PointType;
@@ -356,7 +356,7 @@ type
     pattern: Integer;
     color: Integer;
   end;
-  
+
   (* TP 7 *)
   FillPatternType = array [1..8] of Byte;
 
@@ -408,7 +408,7 @@ procedure Bar3D(
 (* TP7 declaration: procedure Circle (X, Y: Integer i Radius: Word); *)
 procedure Circle(
   x, y: Integer;
-  radius: Integer); 
+  radius: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'circle';
 
 (* TP7 declaration: procedure ClearDevice; *)
@@ -420,7 +420,7 @@ procedure ClearViewPort();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'clearviewport';
 
 (* TP7 declaration: procedure CloseGraph; *)
-procedure CloseGraph(); 
+procedure CloseGraph();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'closegraph';
 
 (* TP7 declaration: procedure DetectGraph (var GraphDriver, GraphMode: Integer); *)
@@ -465,127 +465,127 @@ procedure FloodFill(
 function GetActivePage(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getactivepage';
 
-(* TP7 declaration: procedure GetArcCoords (var ArcCoords: ArcCoordsType); *)  
+(* TP7 declaration: procedure GetArcCoords (var ArcCoords: ArcCoordsType); *)
 procedure GetArcCoords(
   var arcCoords: ArcCoordsType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getarccoords';
 
-(* TP7 declaration: procedure GetAspectRatio (var Xasp, Yasp: Word); *)  
+(* TP7 declaration: procedure GetAspectRatio (var Xasp, Yasp: Word); *)
 procedure GetAspectRatio(
   var xAsp: Integer;
   var yAsp: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getaspectratio';
 
-(* TP7 declaration: function GetBkColor: Word; *)  
+(* TP7 declaration: function GetBkColor: Word; *)
 function GetBkColor(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getbkcolor';
 
-(* TP7 declaration: function GetColor: Word; *)  
-function GetColor(): Integer; 
+(* TP7 declaration: function GetColor: Word; *)
+function GetColor(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getcolor';
 
-(* TP7 declaration: function GetDefaultPalette (var Palette: PaletteType): PaletteType; *)  
+(* TP7 declaration: function GetDefaultPalette (var Palette: PaletteType): PaletteType; *)
 function GetDefaultPalette(): PPaletteType;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getdefaultpalette';
 
-(* TP7 declaration: function GetDriverName: String; *)  
+(* TP7 declaration: function GetDriverName: String; *)
 function GetDriverName(): PAnsiChar;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getdrivername';
 
-(* TP7 declaration: procedure GetFillPattern (var FillPattern: FillPatternType); *)  
+(* TP7 declaration: procedure GetFillPattern (var FillPattern: FillPatternType); *)
 procedure GetFillPattern(
-  pattern: PAnsiChar); 
+  pattern: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getfillpattern';
 
-(* TP7 declaration: procedure GetFillSettings (var Filllnfo: FillSettingsType); *)  
+(* TP7 declaration: procedure GetFillSettings (var Filllnfo: FillSettingsType); *)
 procedure GetFillSettings(
   var fillInfo: FillSettingsType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getfillsettings';
 
-(* TP7 declaration: function GetGraphMode: Integer; *)  
+(* TP7 declaration: function GetGraphMode: Integer; *)
 function GetGraphMode(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getgraphmode';
 
-(* TP7 declaration: procedure GetImage (Xl, Yl, X2, Y2: Integer; var BitMap); *)  
+(* TP7 declaration: procedure GetImage (Xl, Yl, X2, Y2: Integer; var BitMap); *)
 procedure GetImage(
   left, top: Integer;
   right, bottom: Integer;
   bitmap: Pointer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getimage';
 
-(* TP7 declaration: procedure GetLineSettings (var LineInfo: LineSettingsType); *)  
+(* TP7 declaration: procedure GetLineSettings (var LineInfo: LineSettingsType); *)
 procedure GetLineSettings(
   var lineInfo: LineSettingsType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getlinesettings';
 
-(* TP7 declaration: function GetMaxColor: Word; *)  
-function GetMaxColor(): Integer; 
+(* TP7 declaration: function GetMaxColor: Word; *)
+function GetMaxColor(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxcolor';
 
-(* TP7 declaration: function GetMaxMode: Word; *)  
+(* TP7 declaration: function GetMaxMode: Word; *)
 function GetMaxMode(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxmode';
 
-(* TP7 declaration: function GetMaxX: Integer; *)  
-function GetMaxX(): Integer; 
+(* TP7 declaration: function GetMaxX: Integer; *)
+function GetMaxX(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxx';
 
-(* TP7 declaration: function GetMaxY: Integer; *)  
-function GetMaxY(): Integer; 
+(* TP7 declaration: function GetMaxY: Integer; *)
+function GetMaxY(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxy';
 
-(* TP7 declaration: function GetModeName( ModeNumber: Integer): String; *)    
+(* TP7 declaration: function GetModeName( ModeNumber: Integer): String; *)
 function GetModeName(
   modeNumber: Integer): PAnsiChar;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmodename';
 
-(* TP7 declaration: procedure GetModeRange (GraphDriver: Integer; var LoMode, HiMode: Integer); *)  
+(* TP7 declaration: procedure GetModeRange (GraphDriver: Integer; var LoMode, HiMode: Integer); *)
 procedure GetModeRange(
   graphDriver: Integer;
   var loMode, hiMode: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmoderange';
 
-(* TP7 declaration: procedure GetPalette (var Palette: PaletteType); *)  
+(* TP7 declaration: procedure GetPalette (var Palette: PaletteType); *)
 procedure GetPalette(
   var palette: PaletteType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getpalette';
 
-(* TP7 declaration: function GetPaletteSize: Integer; *)  
+(* TP7 declaration: function GetPaletteSize: Integer; *)
 function GetPaletteSize(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getpalettesize';
 
-(* TP7 declaration: function GetPixel (X, Y: Integer): Word; *)  
+(* TP7 declaration: function GetPixel (X, Y: Integer): Word; *)
 function GetPixel(
   x, y: Integer): Cardinal;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getpixel';
 
-(* TP7 declaration: procedure GetTextSettings (var TextInfo: TextSettingsType); *)  
+(* TP7 declaration: procedure GetTextSettings (var TextInfo: TextSettingsType); *)
 procedure GetTextSettings(
   var texttypeinfo: TextSettingsType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'gettextsettings';
 
-(* TP7 declaration: procedure GetViewSettings (var ViewPort: ViewPortType); *)  
+(* TP7 declaration: procedure GetViewSettings (var ViewPort: ViewPortType); *)
 procedure GetViewSettings(
-  var viewPort: ViewPortType); 
+  var viewPort: ViewPortType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getviewsettings';
 
 (* N/A TP7 *)
-function GetVisualPage(): Integer; 
+function GetVisualPage(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getvisualpage';
 
-(* TP7 declaration: function GetX: Integer; *)  
-function GetX(): Integer; 
+(* TP7 declaration: function GetX: Integer; *)
+function GetX(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getx';
 
-(* TP7 declaration: function GetY: Integer; *)  
+(* TP7 declaration: function GetY: Integer; *)
 function GetY(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'gety';
 
-(* TP7 declaration: procedure GraphDefaults *)  
+(* TP7 declaration: procedure GraphDefaults *)
 procedure GraphDefaults();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'graphdefaults';
 
-(* TP7 declaration: function GraphErrorMsg (ErrorCode: Integer): String; *)  
+(* TP7 declaration: function GraphErrorMsg (ErrorCode: Integer): String; *)
 function GraphErrorMsg(
   errorCode: Integer): PAnsiChar;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'grapherrormsg';
@@ -595,18 +595,18 @@ var GraphFreeMemPtr: Pointer;
 var GraphGetMemPtr: Pointer;
 *)
 
-(* TP7 declaration: function GraphResult: Integer; *)  
-function GraphResult(): Integer; 
+(* TP7 declaration: function GraphResult: Integer; *)
+function GraphResult(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'graphresult';
 
-(* TP7 declaration: function ImageSize (Xl, Yl, X2, Y2: Integer): Word; *)    
+(* TP7 declaration: function ImageSize (Xl, Yl, X2, Y2: Integer): Word; *)
 function ImageSize(
   left, top: Integer;
   right, bottom: Integer): Cardinal;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'imagesize';
 
 (* TP7 declaration: procedure InitGraph (var GraphDriver: Integer; var GraphMode: Integer;
-  PathToDriver: 8tring); *)  
+  PathToDriver: 8tring); *)
 procedure InitGraph(
   var graphDriver: Integer;
   var graphMode: Integer;
@@ -618,7 +618,7 @@ type
 
 (* TP7 declaration: InstallUserDriver (Name: String; AutoDetectptr: Pointer): Integer; *)
 function InstallUserDriver(
-  name: PAnsiChar; 
+  name: PAnsiChar;
   detect: UserDriverDetect): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'installuserdriver';
 
@@ -626,41 +626,37 @@ function InstallUserDriver(
 function InstallUserFont(fontFileName: PAnsiChar): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'installuserfont';
 
-(* TP7 declaration: procedure Line (Xl, Yl, X2, Y2: Integer); *)  
+(* TP7 declaration: procedure Line (Xl, Yl, X2, Y2: Integer); *)
 procedure Line(
   x1, y1: Integer;
   x2, y2: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'line';
 
-(* TP7 declaration: procedure LineRel (Dx, Dy: Integer); *)  
+(* TP7 declaration: procedure LineRel (Dx, Dy: Integer); *)
 procedure LineRel(
   dx, dy: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'linerel';
 
-(* TP7 declaration: procedure LineTo (X, Y: Integer); *)  
+(* TP7 declaration: procedure LineTo (X, Y: Integer); *)
 procedure LineTo(
   x, y: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'lineto';
-  
-(* TP7 declaration: procedure MoveRel (Dx, Dy: Integer); *)    
-procedure MoveRel(
-  dx, dy: Integer);
+
+(* TP7 declaration: procedure MoveRel (Dx, Dy: Integer); *)
+procedure MoveRel(dx, dy: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'moverel';
 
-(* TP7 declaration: procedure MoveTo (X, Y: Integer); *)  
-procedure MoveTo(
-  x, y: Integer);
+(* TP7 declaration: procedure MoveTo (X, Y: Integer); *)
+procedure MoveTo(x, y: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'moveto';
 
-(* TP7 declaration: procedure OutText (TextString: String); *)  
-procedure OutText(
-  textString: AnsiString); overload;
+(* TP7 declaration: procedure OutText (TextString: String); *)
+procedure OutText(textString: AnsiString); overload;
 
-procedure OutText(
-  textString: PAnsiChar); overload;
+procedure OutText(textString: PAnsiChar); overload;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'outtext';
 
-(* TP7 declaration: procedure OutTextXY (X, Y: Integer; TextString: String); *)  
+(* TP7 declaration: procedure OutTextXY (X, Y: Integer; TextString: String); *)
 procedure OutTextXY(
   x, y: Integer;
   textString: AnsiString); overload;
@@ -670,27 +666,27 @@ procedure OutTextXY(
   textString: PAnsiChar); overload;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'outtextxy';
 
-(* TP7 declaration: procedure PieSlice (X, Y: Integer; StAngle, EndAngle, Radius: Word) *)  
+(* TP7 declaration: procedure PieSlice (X, Y: Integer; StAngle, EndAngle, Radius: Word) *)
 procedure PieSlice(
   x, y: Integer;
   stAngle, endAngle: Integer;
   radius: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'pieslice';
 
-(* TP7 declaration: procedure PutImage (X, Y: Integer; var BitMap; BitBlt: Word); *)  
+(* TP7 declaration: procedure PutImage (X, Y: Integer; var BitMap; BitBlt: Word); *)
 procedure PutImage(
   left, top: Integer;
   bitmap: Pointer;
   op: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'putimage';
 
-(* TP7 declaration: procedure Putpixel (X, Y: Integer; Pixel: Word); *)  
+(* TP7 declaration: procedure Putpixel (X, Y: Integer; Pixel: Word); *)
 procedure PutPixel(
   x, y: Integer;
   color: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'putpixel';
 
-(* TP7 declaration: procedure Rectangle (Xl, Y1, X2, Y2: Integer); *)  
+(* TP7 declaration: procedure Rectangle (Xl, Y1, X2, Y2: Integer); *)
 procedure Rectangle(
   left, top: Integer;
   right, bottom: Integer);
@@ -710,72 +706,65 @@ type
 function RegisterBgiFont(font: RegisterFontProc): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'registerbgifont';
 
-(* TP7 declaration: procedure RestoreCrtMode; *)  
+(* TP7 declaration: procedure RestoreCrtMode; *)
 procedure RestoreCrtMode();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'restorecrtmode';
 
-(* TP7 declaration: procedure Sector (X, Y: Integer; StAngle, EndAngle, XRadius, YRadius: Word); *)  
+(* TP7 declaration: procedure Sector (X, Y: Integer; StAngle, EndAngle, XRadius, YRadius: Word); *)
 procedure Sector(
   x, y: Integer;
   stAngle, endAngle: Integer;
   xRadius, yRadius: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sector';
 
-(* TP7 declaration: procedure SetActivePage (Page: Word); *)  
-procedure SetActivePage(
-  page: Integer); 
+(* TP7 declaration: procedure SetActivePage (Page: Word); *)
+procedure SetActivePage(page: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setactivepage';
 
-(* TP7 declaration: procedure SetAllPalette (var Palette); *)  
-procedure SetAllPalette(
-  var palette: PaletteType);
+(* TP7 declaration: procedure SetAllPalette (var Palette); *)
+procedure SetAllPalette(var palette: PaletteType);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setallpalette';
 
-(* TP7 declaration: procedure SetAspectRatio (Xasp, Yasp: Word): Word; *)  
-procedure SetAspectRatio(
-  xAsp, yAsp: Integer);
+(* TP7 declaration: procedure SetAspectRatio (Xasp, Yasp: Word): Word; *)
+procedure SetAspectRatio(xAsp, yAsp: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setaspectratio';
 
-(* TP7 declaration: procedure SetBkColor (ColorNum: Word); *)  
-procedure SetBkColor(
-  color: Integer); 
+(* TP7 declaration: procedure SetBkColor (ColorNum: Word); *)
+procedure SetBkColor(color: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setbkcolor';
 
-(* TP7 declaration: procedure SetColor (Color: Word); *)  
-procedure SetColor(
-  color: Integer);
+(* TP7 declaration: procedure SetColor (Color: Word); *)
+procedure SetColor(color: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setcolor';
 
-(* TP7 declaration: procedure SetFillPattern (Pattern: FillPatternType; Color: Word); *)  
+(* TP7 declaration: procedure SetFillPattern (Pattern: FillPatternType; Color: Word); *)
 procedure SetFillPattern(
   uPattern: PAnsiChar;
   color: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setfillpattern';
 
-(* TP7 declaration: procedure SetFillStyle (Pattern: Word; Color: Word); *)  
+(* TP7 declaration: procedure SetFillStyle (Pattern: Word; Color: Word); *)
 procedure SetFillStyle(
   pattern: Integer;
   color: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setfillstyle';
 
-(* TP7 declaration: procedure SetGraphBufSize (BufSize: Word); *)  
-function SetGraphBufSize(
-  bufSize: Cardinal): Cardinal;
+(* TP7 declaration: procedure SetGraphBufSize (BufSize: Word); *)
+function SetGraphBufSize(bufSize: Cardinal): Cardinal;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setgraphbufsize';
 
-(* TP7 declaration: procedure SetGraphMode (Mode: Integer); *)  
-procedure SetGraphMode(
-  mode: Integer);
+(* TP7 declaration: procedure SetGraphMode (Mode: Integer); *)
+procedure SetGraphMode(mode: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setgraphmode';
 
-(* TP7 declaration: procedure SetLineStyle (LineStyle: Word; Pattern: Word; Thickness: Word); *)  
+(* TP7 declaration: procedure SetLineStyle (LineStyle: Word; Pattern: Word; Thickness: Word); *)
 procedure SetLineStyle(
   lineStyle: Integer;
   upattern: Cardinal;
   thickness: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setlinestyle';
 
-(* TP7 declaration: procedure SetPalette (ColorNum: Word; Color: Shortint); *)  
+(* TP7 declaration: procedure SetPalette (ColorNum: Word; Color: Shortint); *)
 procedure SetPalette(
   colorNum: Integer;
   color: Integer); cdecl;
@@ -783,57 +772,81 @@ procedure SetPalette(
 
 (* procedure SetRGBPalette (ColorNum, RedValue, GreenValue, BlueValue: Integer); *)
 
-(* TP7 declaration: procedure SetTextJustify (Horiz, Vert: Word); *)  
+(* TP7 declaration: procedure SetTextJustify (Horiz, Vert: Word); *)
 procedure SetTextJustify(
   horiz: Integer;
   vert: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'settextjustify';
 
-(* TP7 declaration: procedure SetTextStyle (Font: Word; Direction: Word; CharSize: Word); *)  
+(* TP7 declaration: procedure SetTextStyle (Font: Word; Direction: Word; CharSize: Word); *)
 procedure SetTextStyle(
   font: Integer;
   direction: Integer;
   charSize: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'settextstyle';
 
-(* TP7 declaration: procedure SetuserCharSize (MultX, Divx, MultY, DivY: Word); *)  
+(* TP7 declaration: procedure SetuserCharSize (MultX, Divx, MultY, DivY: Word); *)
 procedure SetUserCharSize(
   multX, divX: Integer;
   multY, divY: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setusercharsize';
 
-(* TP7 declaration: procedure SetViewPort (X1, Y1, X2, Y2: Integer; Clip: Boolean); *)  
+(* TP7 declaration: procedure SetViewPort (X1, Y1, X2, Y2: Integer; Clip: Boolean); *)
 procedure SetViewPort(
   left, top: Integer;
   right, bottom: Integer;
   clip: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setviewport';
 
-(* TP7 declaration: procedure SetVisualPage (Page: Word); *)  
-procedure SetVisualPage(
-  page: Integer);
+(* TP7 declaration: procedure SetVisualPage (Page: Word); *)
+procedure SetVisualPage(page: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setvisualpage';
 
-(* TP7 declaration: procedure SetWriteMode (WriteMode: Integer); *)  
-procedure SetWriteMode(
-  mode: Integer);
+(* TP7 declaration: procedure SetWriteMode (WriteMode: Integer); *)
+procedure SetWriteMode(mode: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwritemode';
 
-(* TP7 declaration: function TextHeight (TextString: String): Word; *)  
-function TextHeight(
-  textString: PAnsiChar): Integer;
+(* TP7 declaration: function TextHeight (TextString: String): Word; *)
+function TextHeight(textString: AnsiString): Integer; overload;
+
+function TextHeight(textString: PAnsiChar): Integer; overload;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'textheight';
 
-(* TP7 declaration: function TextWidth (TextString: String): Word; *)  
-function TextWidth(
-  textString: PAnsiChar): Integer;
+(* TP7 declaration: function TextWidth (TextString: String): Word; *)
+function TextWidth(textString: AnsiString): Integer; overload;
+
+function TextWidth(textString: PAnsiChar): Integer; overload;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'textwidth';
 
 (******************)
 (* SDL extensions *)
 (******************)
 
-(* Screen and Windows functions *)
+function ALPHA_VALUE(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'ALPHA_VALUE';
+
+function BLUE_VALUE(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'BLUE_VALUE';
+
+function COLOR(red, green, blue: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR';
+
+function COLOR32(color: UInt32): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR32';
+
+function colorRGB(red, green, blue: Integer): UInt32; inline;
+
+function GREEN_VALUE(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'GREEN_VALUE';
+
+function IS_BGI_COLOR(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'IS_BGI_COLOR';
+
+function IS_RGB_COLOR(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'IS_RGB_COLOR';
+
+function RED_VALUE(color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'RED_VALUE';
 
 (*
   Updates the screen contents, i.e. displays all graphics.
@@ -847,43 +860,46 @@ procedure InitWindow(width, height: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'initwindow';
 
 (*
-*)  
-procedure SetWinOptions(title: PAnsiChar; x, y: Integer; flags: Uint32);
+*)
+procedure SetWinOptions(
+  title: PAnsiChar;
+  x, y: Integer;
+  flags: Uint32);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwinoptions';
 
 (*
-*)  
-procedure SetWinTitle(id: Integer; title: PAnsiChar);
+*)
+procedure SetWinTitle(
+  id: Integer;
+  title: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwintitle';
 
 (*
   Triggers automatic screen refresh.
   Note: it may not work on some graphics cards.
-*)  
+*)
 procedure SdlBgiAuto();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgiauto';
 
-(* 
+(*
   Triggers “fast mode” even if the graphics system was opened with initgraph().
   Calling refresh() is needed to display graphics.
-*)  
+*)
 procedure SdlBgiFast();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgifast';
 
-(* 
+(*
   Triggers “slow mode” even if the graphics system was opened with initwindow().
   Calling refresh() is not needed.
 *)
 procedure SdlBgiSlow();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgislow';
 
-function COLOR(r, g, b: Integer): Integer;
-  cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR';
 
-procedure ShowErrorBox (msg: PAnsiChar);
+procedure ShowErrorBox(msg: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showerrorbox';
-  
-procedure ShowInfoBox (msg: PAnsiChar);
+
+procedure ShowInfoBox(msg: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showinfobox';
 
 
@@ -901,20 +917,19 @@ procedure WriteImageFile(
 
 (* Not graphical *)
 function KbHit(): Integer;
-  cdecl; external LIB_UBGI name LIB_FNPFX + 'kbhit';  
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'kbhit';
 
 (* TP7 declaration (Crt unit): function KeyPressed: Boolean; *)
 function KeyPressed(): Boolean; inline;
 
-function GetCh(): Integer; 
+function GetCh(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'bgi_getch';
 
-function ReadKey(): Integer; 
+function ReadKey(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'bgi_getch';
 
 (* TP7 declaration (Crt unit): procedure Delay (Ms: Word); *)
-procedure Delay(
-  msec: Integer);
+procedure Delay(msec: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'delay';
 
 implementation
@@ -924,8 +939,7 @@ begin
   Result := KbHit() <> 0;
 end;
 
-procedure OutText(
-  textString: AnsiString);
+procedure OutText(textString: AnsiString);
 begin
   if Length(textString) > 0 then OutText(PAnsiChar(textString));
 end;
@@ -935,6 +949,27 @@ procedure OutTextXY(
   textString: AnsiString);
 begin
   if Length(textString) > 0 then OutTextXY(x, y, PAnsiChar(textString));
+end;
+
+function TextHeight(textString: AnsiString): Integer;
+begin
+  if Length(textString) > 0 then
+    Result := TextHeight(PAnsiChar(textString))
+  else
+    Result := 0;
+end;
+
+function TextWidth(textString: AnsiString): Integer;
+begin
+  if Length(textString) > 0 then
+    Result := TextWidth(PAnsiChar(textString))
+  else
+    Result := 0;
+end;
+
+function colorRGB(red, green, blue: Integer): UInt32;
+begin
+  Result := $ff000000 or (red shl 16) or (green shl 8) or blue;
 end;
 
 end.
