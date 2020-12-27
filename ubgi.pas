@@ -770,8 +770,9 @@ procedure SetPalette(
   color: Integer); cdecl;
   external LIB_UBGI name LIB_FNPFX + 'setpalette';
 
-(* procedure SetRGBPalette (ColorNum, RedValue, GreenValue, BlueValue: Integer); *)
-
+procedure SetRGBPalette (ColorNum, RedValue, GreenValue, BlueValue: Integer);
+  external LIB_UBGI name LIB_FNPFX + 'setrgbpalette';
+  
 (* TP7 declaration: procedure SetTextJustify (Horiz, Vert: Word); *)
 procedure SetTextJustify(
   horiz: Integer;
@@ -849,6 +850,38 @@ function RED_VALUE(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'RED_VALUE';
 
 (*
+  Waits for a keypress, mouse click, or SDL QUIT event, 
+  and returns the code of the key, mouse button, or QUIT.
+*)
+function GetEvent(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getevent';
+
+function Event(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'event';
+
+function EventType(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'eventtype';
+
+(*
+  Returns the code of the mouse button that was clicked, 
+  or 0 if none was clicked.
+*)
+function MouseClick(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'mouseclick';
+
+(*
+  Returns the X coordinate of the last mouse click.
+*)
+function MouseX(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'mousex';
+
+(*
+  Returns the Y coordinate of the last mouse click.
+*)
+function MouseY(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'mousey';
+
+(*
   Updates the screen contents, i.e. displays all graphics.
 *)
 procedure Refresh();
@@ -902,7 +935,9 @@ procedure ShowErrorBox(msg: PAnsiChar);
 procedure ShowInfoBox(msg: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showinfobox';
 
-
+procedure PutBuffer(buffer: PUint32);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'putbuffer';
+  
 procedure ReadImageFile(
   fileName: PAnsiChar;
   left, top: Integer;
@@ -918,6 +953,14 @@ procedure WriteImageFile(
 (* Not graphical *)
 function KbHit(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'kbhit';
+
+(*
+  Returns 1 when any key is pressed, including special keys 
+  (Ctrl, Shift, etc.) in 'slow mode', a screen refresh is performed. 
+  If an SDL QUIT event occurs, QUIT is returned.
+*)
+function XKbHit(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'xkbhit';
 
 (* TP7 declaration (Crt unit): function KeyPressed: Boolean; *)
 function KeyPressed(): Boolean; inline;

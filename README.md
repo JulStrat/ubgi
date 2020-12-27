@@ -46,5 +46,14 @@ dcc64 -B -U../ fonts.pas
 ```
 ## Screenshots
 
+fonts
+
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/fonts.png">
+
+plasma
+
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/plasma.png">
+
+psychedelia
+
+<img src="https://github.com/JulStrat/ubgi/blob/master/examples/psychedelia.png">
