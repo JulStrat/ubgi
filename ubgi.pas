@@ -38,7 +38,7 @@ interface
 
 const
   {$IF Defined(MSWINDOWS)}
-    LIB_UBGI = 'SDL_bgi.dll';
+    LIB_UBGI = 'SDL_bgi';
     LIB_FNPFX = '';
   {$ELSE}
     {$MESSAGE Error 'Unsupported platform'}
@@ -46,11 +46,11 @@ const
 
 const
   NOPE = 0;
-  EAH = 1;
+  YEAH = 1;
 
 const
-  SDL_BGI_VERSION = '2.4.1';
-  UBGI_VERSION = '0.2.0';
+  SDL_BGI_VERSION = '2.4.2';
+  UBGI_VERSION = '0.3.0';
 
   BGI_WINTITLE_LEN = 512;
   (* number of concurrent windows that can be created *)
@@ -221,7 +221,7 @@ const
   Yellow = 14;
   White = 15;
   MaxColors = 15;
-  // Blink = 128;
+  (* Blink = 128; *)
 
 (* line style, thickness, and drawing mode *)
 const
@@ -606,7 +606,7 @@ function ImageSize(
   cdecl; external LIB_UBGI name LIB_FNPFX + 'imagesize';
 
 (* TP7 declaration: procedure InitGraph (var GraphDriver: Integer; var GraphMode: Integer;
-  PathToDriver: 8tring); *)
+  PathToDriver: string); *)
 procedure InitGraph(
   var graphDriver: Integer;
   var graphMode: Integer;
@@ -767,11 +767,11 @@ procedure SetLineStyle(
 (* TP7 declaration: procedure SetPalette (ColorNum: Word; Color: Shortint); *)
 procedure SetPalette(
   colorNum: Integer;
-  color: Integer); cdecl;
-  external LIB_UBGI name LIB_FNPFX + 'setpalette';
+  color: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setpalette';
 
-procedure SetRGBPalette (ColorNum, RedValue, GreenValue, BlueValue: Integer);
-  external LIB_UBGI name LIB_FNPFX + 'setrgbpalette';
+procedure SetRGBPalette(ColorNum, RedValue, GreenValue, BlueValue: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setrgbpalette';
   
 (* TP7 declaration: procedure SetTextJustify (Horiz, Vert: Word); *)
 procedure SetTextJustify(
@@ -823,32 +823,90 @@ function TextWidth(textString: PAnsiChar): Integer; overload;
 (* SDL extensions *)
 (******************)
 
+(* 
+  Returns the alpha (transparency) component of an ARGB colour
+  in the ARGB palette.
+*)
 function ALPHA_VALUE(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'ALPHA_VALUE';
 
+(* Returns the blue component of an ARGB colour in the ARGB palette. *)
 function BLUE_VALUE(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'BLUE_VALUE';
 
+(*
+  Can be used as an argument for setcolor(), setbkcolor(), 
+  setfillpattern() and setfillstyle() to set a colour specifying 
+  its ARGB components. The colour is stored in ARGB_TMP_COL,
+  and it is also copied in one of the following: ARGB_FG_COL,
+  ARGB_BG_COL, ARGB_FILL_COL.
+  
+  Functions ALPHA_VALUE, BLUE_VALUE, GREEN_VALUE and RED_VALUE
+  do not work on temporary colours.
+*)  
 function COLOR(red, green, blue: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR';
 
+(*
+  Can be used as an argument for setcolor(), setbkcolor(),
+  setfillpattern() and setfillstyle() to set a colour as ARGB integer.
+  The colour is stored in ARGB_TMP_COL, and it is also copied 
+  in one of the following: ARGB_FG_COL, ARGB_BG_COL, ARGB_FILL_COL.
+  
+  Functions ALPHA_VALUE, BLUE_VALUE, GREEN_VALUE and RED_VALUE 
+  do not work on temporary colours.
+*)
 function COLOR32(color: UInt32): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'COLOR32';
 
+(*
+  Can be used to compose a 32 bit colour with r g b components;
+  the alpha value is set to 0xFF. This macro is typically used 
+  to set values in memory buffers.
+*)
 function colorRGB(red, green, blue: Integer): UInt32; inline;
 
+(* Returns the green component of an ARGB colour in the ARGB palette. *)
 function GREEN_VALUE(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'GREEN_VALUE';
 
+(*
+  Returns 1 if the current drawing colour is a standard BGI colour
+  (that is, not ARGB). 
+*)
 function IS_BGI_COLOR(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'IS_BGI_COLOR';
 
+(*
+  Returns 1 if the current drawing colour is ARGB.
+  The color argument is actually redundant.
+*)
 function IS_RGB_COLOR(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'IS_RGB_COLOR';
 
+(* Returns the red component of an ARGB colour in the ARGB palette. *)
 function RED_VALUE(color: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'RED_VALUE';
 
+(*
+  Plots a point at (x,y) using the current drawing colour. 
+  This function may be faster than putpixel().
+*)
+procedure _PutPixel(x, y: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + '_putpixel';
+
+(* Closes the window whose identifier is id. *)
+procedure CloseWindow(id: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'closewindow';
+  
+(*
+  Waits for millisec milliseconds. In 'slow mode', a screen refresh
+  is performed. If an event occurs during the delay, this function 
+  returns 1, otherwise 0. Use eventtype to get the last event.
+*)
+procedure EDelay(millisec: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'edelay';
+  
 (*
   Waits for a keypress, mouse click, or SDL QUIT event, 
   and returns the code of the key, mouse button, or QUIT.
@@ -856,12 +914,27 @@ function RED_VALUE(color: Integer): Integer;
 function GetEvent(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getevent';
 
+(*
+  Returns 1 if an event (mouse click, key press, or QUIT) has occurred.
+*)
 function Event(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'event';
 
+(*
+  Returns the type of the last event; 
+  either SDL KEYPRESS or SDL MOUSEBUTTONDOWN.
+*)
 function EventType(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'eventtype';
 
+(*
+  Copies the contents of the active window to buffer,
+  which must be a getmaxy()+1 x getmaxx()+1 array of Uint32 
+  in ARGB format.
+*)
+procedure GetBuffer(buffer: PUint32);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getbuffer';
+  
 (*
   Returns the code of the mouse button that was clicked, 
   or 0 if none was clicked.
@@ -888,24 +961,37 @@ procedure Refresh();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'refresh';
 
 (*
+  Initializes the graphics system, opening a widthxheight window.
+  If either width or height is 0, then SDL_FULLSCREEN will be used. 
+  Multiple windows can be created, unless a fullscreen window 
+  is already present.
+  
+  The user must update the screen as needed using refresh(), 
+  or use sdlbgiauto().
 *)
 procedure InitWindow(width, height: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'initwindow';
 
 (*
+  Resets the window title title and position to (x, y) 
+  of an existing window identified by id. x and y can be set 
+  to SDL_WINDOWPOS_CENTERED or SDL_WINDOWPOS_UNDEFINED.
+  
+  If either x or y is -1, the position parameters are ignored.
 *)
 procedure SetWinOptions(
   title: PAnsiChar;
   x, y: Integer;
-  flags: Uint32);
+  flags: Int32);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwinoptions';
 
 (*
-*)
+NOT IMPLEMENTED
 procedure SetWinTitle(
   id: Integer;
   title: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwintitle';
+*)
 
 (*
   Triggers automatic screen refresh.
@@ -928,22 +1014,55 @@ procedure SdlBgiFast();
 procedure SdlBgiSlow();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'sdlbgislow';
 
+(*
+  Sets alpha transparency for colour col to alpha (0-255);
+  0 means full transparecy, 255 full opacity. 
+  setalpha() works with colours in both palettes.
+*)
+procedure SetAlpha (
+  col: Integer;
+  alpha: Byte);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setalpha';  
 
+(*
+  Opens an error message box with the specified message.
+  The message box waits for the user to click on the OK button.
+*)
 procedure ShowErrorBox(msg: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showerrorbox';
 
+(*
+  Opens an information message box with the specified message.
+  The message box waits for the user to click on the OK button.
+*)
 procedure ShowInfoBox(msg: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showinfobox';
 
+(*
+  Copies buffer to the current window.
+  Buffer must be a getmaxy()+1 x getmaxx()+1 array of Uint32 
+  in ARGB format. This function is faster than direct pixel 
+  manipulation.
+*)
 procedure PutBuffer(buffer: PUint32);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'putbuffer';
-  
+
+(*
+  Reads a .bmp file and displays it immediately at (x1, y1). 
+  If (x2, y2) are not 0, the bitmap is stretched to fit 
+  the rectangle x1, y1 - x2, y2; otherwise, the bitmap is
+  clipped as necessary.
+*)  
 procedure ReadImageFile(
   fileName: PAnsiChar;
   left, top: Integer;
   right, bottom: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'readimagefile';
 
+(*
+  Writes a .bmp file from the screen rectangle 
+  defined by left, top - right, bottom.
+*)
 procedure WriteImageFile(
   fileName: PAnsiChar;
   left, top: Integer;
@@ -951,6 +1070,11 @@ procedure WriteImageFile(
   cdecl; external LIB_UBGI name LIB_FNPFX + 'writeimagefile';
 
 (* Not graphical *)
+(*
+  Returns 1 when a key is pressed, excluding special keys 
+  (Ctrl, Shift, etc.); in 'slow mode', a screen refresh is performed.
+  If an SDL_QUIT event occurs, QUIT is returned.
+*)
 function KbHit(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'kbhit';
 
@@ -965,13 +1089,23 @@ function XKbHit(): Integer;
 (* TP7 declaration (Crt unit): function KeyPressed: Boolean; *)
 function KeyPressed(): Boolean; inline;
 
+(* 
+  Waits for a key and returns its ASCII code. 
+  In 'slow mode', a screen refresh is performed.
+  If an SDL_QUIT event occurs, QUIT is returned.
+*)
 function GetCh(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'bgi_getch';
 
 function ReadKey(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'bgi_getch';
 
-(* TP7 declaration (Crt unit): procedure Delay (Ms: Word); *)
+(*
+  Waits for msec milliseconds. In 'slow mode', a screen refresh
+  is performed. Events that occur during the delay are disregarded.
+
+  TP7 declaration (Crt unit): procedure Delay (Ms: Word);  
+*)
 procedure Delay(msec: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'delay';
 

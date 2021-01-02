@@ -1,9 +1,13 @@
 // SDL_bgi.h	-*- C -*-
 
-// A BGI (Borland Graphics Library) implementation based on SDL2.
-// Easy to use, pretty fast, and useful for porting old programs.
-// Guido Gonzato, PhD
-// August 8, 2020
+// SDL_bgi is a multiplatform, SDL2-based GRAPHICS.H implementation.
+// Easy to use, pretty fast, useful for porting old programs
+// and for teaching introductory computer graphics.
+//
+// By Guido Gonzato, PhD
+// Automatic refresh patch, CHR font support:
+// Marco Diego Aurélio Mesquita
+// November 4, 2020
 
 // ZLib License
 
@@ -30,6 +34,9 @@ freely, subject to the following restrictions:
 #ifndef _SDL_BGI_H
 #define _SDL_BGI_H
 
+#ifndef __GRAPHICS_H
+#define __GRAPHICS_H
+
 // SDL2 stuff
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
@@ -40,7 +47,7 @@ freely, subject to the following restrictions:
 #include <math.h>    // for sin(), cos()
 #include <string.h>  // for strlen(), memcpy()
 
-#define SDL_BGI_VERSION 2.4.1
+#define SDL_BGI_VERSION 2.4.2
 
 enum { NOPE, YEAH } ;
 #define BGI_WINTITLE_LEN 512 // more than enough
@@ -54,6 +61,7 @@ enum { NOPE, YEAH } ;
 extern SDL_Window   *bgi_window;
 extern SDL_Renderer *bgi_renderer;
 extern SDL_Texture  *bgi_texture;
+extern Uint32        PALETTE_SIZE;
 
 // available visual pages
 
@@ -63,16 +71,16 @@ extern SDL_Texture  *bgi_texture;
 
 enum {
   DEFAULT_FONT,      // 8x8 bitmap
-  TRIPLEX_FONT,      // timesrb.h
-  SMALL_FONT,        // small.h
-  SANS_SERIF_FONT,   // futuram.h
-  GOTHIC_FONT,       // gothgbt.h
-  SCRIPT_FONT,       // cursive.h
-  SIMPLEX_FONT,      // futural.h
-  TRIPLEX_SCR_FONT,  // rowmant.h
-  COMPLEX_FONT,      // timesr.h
-  EUROPEAN_FONT,     // not implemented -> Triplex
-  BOLD_FONT,         // not implemented -> Triplex
+  TRIPLEX_FONT,      // trip.h
+  SMALL_FONT,        // litt.h
+  SANS_SERIF_FONT,   // sans.h
+  GOTHIC_FONT,       // goth.h
+  SCRIPT_FONT,       // scri.h
+  SIMPLEX_FONT,      // simp.h
+  TRIPLEX_SCR_FONT,  // tscr.h
+  COMPLEX_FONT,      // lcom.h
+  EUROPEAN_FONT,     // euro.h
+  BOLD_FONT,         // bold.h
   LAST_SPEC_FONT
 };
 
@@ -85,12 +93,36 @@ enum {
   BOTTOM_TEXT = 0, TOP_TEXT = 2
 };
 
-// BGI colours
+// BGI colours, including CGA and EGA palettes
 
 enum {
-  BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN,
-  LIGHTGRAY, DARKGRAY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN,
-  LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE, MAXCOLORS = 15
+  BLACK        = 0,                         EGA_BLACK        = 0,
+  BLUE         = 1,                         EGA_BLUE         = 1,
+  GREEN        = 2,  CGA_GREEN        = 2,  EGA_GREEN        = 2,
+  CYAN         = 3,  CGA_CYAN         = 3,  EGA_CYAN         = 3,
+  RED          = 4,  CGA_RED          = 4,  EGA_RED          = 4,
+  MAGENTA      = 5,  CGA_MAGENTA      = 5,  EGA_MAGENTA      = 5,
+  BROWN        = 6,  CGA_BROWN        = 6,  EGA_BROWN        = 6,
+  LIGHTGRAY    = 7,  CGA_LIGHTGRAY    = 7,  EGA_LIGHTGRAY    = 7,
+  DARKGRAY     = 8,                         EGA_DARKGRAY     = 8,
+  LIGHTBLUE    = 9,                         EGA_LIGHTBLUE    = 9,
+  LIGHTGREEN   = 10, CGA_LIGHTGREEN   = 10, EGA_LIGHTGREEN   = 10,
+  LIGHTCYAN    = 11, CGA_LIGHTCYAN    = 11, EGA_LIGHTCYAN    = 11,
+  LIGHTRED     = 12, CGA_LIGHTRED     = 12, EGA_LIGHTRED     = 12,
+  LIGHTMAGENTA = 13, CGA_LIGHTMAGENTA = 13, EGA_LIGHTMAGENTA = 13,
+  YELLOW       = 14, CGA_YELLOW       = 14, EGA_YELLOW       = 14,
+  WHITE        = 15, CGA_WHITE        = 15, EGA_WHITE        = 15,
+  MAXCOLORS    = 15
+};
+
+// ARGB colours, set by COLOR ()
+
+enum {
+  ARGB_FG_COL   = 16,
+  ARGB_BG_COL   = 17,
+  ARGB_FILL_COL = 18,
+  ARGB_TMP_COL  = 19,
+  TMP_COLORS    = 4
 };
 
 // line style, thickness, and drawing mode
@@ -119,8 +151,7 @@ enum {
 #define WM_WHEELDOWN    SDL_USEREVENT + 1
 #define WM_MOUSEMOVE    SDL_MOUSEMOTION
 
-#define PALETTE_SIZE    4096
-
+// keys
 #define KEY_HOME        SDLK_HOME
 #define KEY_LEFT        SDLK_LEFT
 #define KEY_UP          SDLK_UP
@@ -167,7 +198,7 @@ enum {
 
 enum {
   DETECT = -1,
-  grOk = 0, grError = -11, SDL = 0,
+  SDL = 0,
   // all modes @ 320x200
   SDL_320x200 = 1, SDL_CGALO = 1, CGA = 1, CGAC0 = 1, CGAC1 = 1,
   CGAC2 = 1, CGAC3 = 1, MCGAC0 = 1, MCGAC1 = 1, MCGAC2 = 1,
@@ -195,9 +226,28 @@ enum {
   SDL_1280x1024 = 10, SDL_SVGAHI = 10,
   // all modes @ 1366x768
   SDL_1366x768 = 11, SDL_WXGA = 11,
-  // SDL_1920x1080 = XX,
   // other
   SDL_USER = 12, SDL_FULLSCREEN = 13
+};
+
+// error messages
+enum graphics_errors {
+  grOk               =   0,
+  grNoInitGraph      =  -1,
+  grNotDetected      =  -2,
+  grFileNotFound     =  -3,
+  grInvalidDriver    =  -4,
+  grNoLoadMem        =  -5,
+  grNoScanMem        =  -6,
+  grNoFloodMem       =  -7,
+  grFontNotFound     =  -8,
+  grNoFontMem        =  -9,
+  grInvalidMode      = -10,
+  grError            = -11,
+  grIOerror          = -12,
+  grInvalidFont      = -13,
+  grInvalidFontNum   = -14,
+  grInvalidVersion   = -18
 };
 
 // libXbgi compatibility
@@ -253,7 +303,8 @@ struct linesettingstype {
 
 struct palettetype {
   unsigned char size;
-  signed char colors[MAXCOLORS + 1];
+  // signed char in Turbo C / Borland C++
+  Uint32 colors[MAXCOLORS + 1];
 };
 
 struct textsettingstype {
@@ -286,7 +337,7 @@ void circle (int, int, int);
 void cleardevice ();
 void clearviewport ();
 void closegraph (void);
-void delay (int msec);
+void delay (int);
 void detectgraph (int *, int *);
 void drawpoly (int, int *);
 void ellipse (int, int, int, int, int, int);
@@ -316,7 +367,7 @@ int  getmaxy (void);
 char *getmodename (int);
 void getmoderange (int, int *, int *);
 void getpalette (struct palettetype *);
-int  getpalettesize (struct palettetype *);
+int  getpalettesize (void);
 unsigned int
      getpixel (int, int);
 void gettextsettings (struct textsettingstype *);
@@ -330,12 +381,12 @@ int  graphresult (void);
 unsigned
      imagesize (int, int, int, int);
 void initgraph (int *, int *, char *);
-int  installuserdriver (char *name, int (*detect)(void));
+int  installuserdriver (char *, int (*)(void));
 int  installuserfont (char *);
 int  kbhit (void);
 void line (int, int, int, int);
-void linerel (int dx, int dy);
-void lineto (int x, int y);
+void linerel (int, int);
+void lineto (int, int);
 void moverel (int, int);
 void moveto (int, int);
 void outtext (char *);
@@ -346,8 +397,8 @@ void putpixel (int, int, int);
 #define random(range) (rand() % (range))
 void readimagefile (char *, int, int, int, int);
 void rectangle (int, int, int, int);
-int  registerbgidriver (void (*driver)(void));
-int  registerbgifont (void (*font)(void));
+int  registerbgidriver (void (*)(void));
+int  registerbgifont (void (*)(void));
 void restorecrtmode (void);
 void sector (int, int, int, int, int, int);
 void setactivepage (int);
@@ -380,6 +431,7 @@ void closewindow (int);
 int  COLOR (int, int, int);
 int  COLOR32 (Uint32);
 #define colorRGB(r,g,b)  0xff000000 | ((r) << 16) | ((g) << 8) | (b)
+int edelay (int);
 int  event (void);
 int  eventtype (void);
 // void freeimage (void *);
@@ -388,9 +440,12 @@ int  getcurrentwindow (void);
 void getleftclick (void);
 int  getevent (void);
 void getlinebuffer (int, Uint32 *);
+int  getmaxheight (void);
+int  getmaxwidth (void);
 void getmiddleclick (void);
 void getmouseclick (int, int *, int *);
 void getrightclick (void);
+void getscreensize (int *, int *);
 int  GREEN_VALUE (int);
 void initpalette (void);
 void initwindow (int, int);
@@ -405,6 +460,8 @@ void putlinebuffer (int, Uint32 *);
 void _putpixel (int, int);
 int  RED_VALUE (int );
 void refresh (void);
+void resetwinoptions (int, char *, int, int);
+void resizepalette (Uint32);
 void sdlbgiauto (void);
 void sdlbgifast (void);
 void sdlbgislow (void);
@@ -415,6 +472,7 @@ void setcurrentwindow (int);
 void setrgbcolor (int);
 void setrgbpalette (int, int, int, int);
 void setwinoptions (char *, int, int, Uint32);
+void setwintitle (int, char *);
 void showinfobox (const char *);
 void showerrorbox (const char *);
 void swapbuffers (void);
@@ -424,7 +482,7 @@ int  xkbhit (void);
 }
 #endif
 
-// #ifndef _SDL_BGI_H
+#endif // __GRAPHICS_H
 
 #endif // _SDL_BGI_H
 
