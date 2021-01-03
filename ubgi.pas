@@ -36,13 +36,13 @@ unit ubgi;
 
 interface
 
+{$IF Defined(MSWINDOWS) or Defined(Linux)}
 const
-  {$IF Defined(MSWINDOWS)}
-    LIB_UBGI = 'SDL_bgi';
-    LIB_FNPFX = '';
-  {$ELSE}
-    {$MESSAGE Error 'Unsupported platform'}
-  {$ENDIF}
+  LIB_UBGI = 'SDL_bgi';
+  LIB_FNPFX = '';
+{$ELSE}
+  {$MESSAGE Error 'Unsupported platform'}
+{$ENDIF}
 
 const
   NOPE = 0;
@@ -50,7 +50,7 @@ const
 
 const
   SDL_BGI_VERSION = '2.4.2';
-  UBGI_VERSION = '0.3.0';
+  UBGI_VERSION = '0.3.1';
 
   BGI_WINTITLE_LEN = 512;
   (* number of concurrent windows that can be created *)
@@ -906,13 +906,6 @@ procedure CloseWindow(id: Integer);
 *)
 procedure EDelay(millisec: Integer);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'edelay';
-  
-(*
-  Waits for a keypress, mouse click, or SDL QUIT event, 
-  and returns the code of the key, mouse button, or QUIT.
-*)
-function GetEvent(): Integer;
-  cdecl; external LIB_UBGI name LIB_FNPFX + 'getevent';
 
 (*
   Returns 1 if an event (mouse click, key press, or QUIT) has occurred.
@@ -934,6 +927,58 @@ function EventType(): Integer;
 *)
 procedure GetBuffer(buffer: PUint32);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getbuffer';
+
+(*
+  Returns the integer id of the current window.
+*)
+procedure GetCurrentWindow();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getcurrentwindow';
+
+(*
+  Waits for a keypress, mouse click, or SDL QUIT event, 
+  and returns the code of the key, mouse button, or QUIT.
+*)
+function GetEvent(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getevent';
+
+(*
+  Waits for the left mouse button to be clicked and released.
+*)
+procedure GetLeftClick();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getleftclick';
+
+(*
+  Copies the y-th screen line to linebuffer, 
+  which must be a getmaxx()+1 array of Uint32 in ARGB format.
+*)
+procedure GetLineBuffer(
+  y: Integer;
+  linebuffer: PUInt32);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getlinebuffer';
+
+(*
+  Waits for the middle mouse button to be clicked and released.
+*)
+procedure GetMiddleClick();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmiddleclick';
+
+(*
+  Returns the maximum possible height for a new window 
+  (actual screen height in pixels).
+*)
+function GetMaxHeight(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxheight';
+  
+(*
+  Returns the maximum possible width for a new window 
+  (actual screen width in pixels).
+*)
+function GetMaxWidth(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxwidth';
+
+(* Returns 1 if the 'kind' mouse button was clicked. *)
+function IsMouseClick(kind: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'ismouseclick';
   
 (*
   Returns the code of the mouse button that was clicked, 
