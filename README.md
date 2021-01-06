@@ -4,7 +4,7 @@ Object Pascal bindings for [SDL_bgi](http://libxbgi.sourceforge.net) library.
 
 Repository structure - 
 - `ubgi.pas` - Pascal API unit.
-- `bin` - Dynamic Windows libraries v2.4.2 .
+- `bin` - Dynamic Windows libraries v2.4.2.
 - `examples` - Pascal port of some original examples.
 - `include` - C API v2.4.2 header file.
 
@@ -13,28 +13,27 @@ Repository structure -
 ```
 program exus;
 {$IF Defined(FPC)}{$MODE Delphi}{$ENDIF}
+{$APPTYPE Console}
+
 uses ubgi;
 
 var
   gd, gm: Integer;
   info: String;
 
-begin  
-  gd := DETECT; gm := VGA;
-  
-  initgraph(gd, gm, '');
-  setcolor(BLUE);
-  setbkcolor(WHITE);
-  cleardevice();
+begin
+  gd := DETECT; gm := VGAHi;
+
+  InitGraph(gd, gm, '');
+  SetColor(BLUE);
+  SetBkColor(WHITE);
 
   info := 'SDL_bgi & Object Pascal';
-  settextstyle(BOLDFONT, HORIZDIR, 0);
+  SetTextStyle(SimplexFont, HorizDir, 0);
   OutText(info);
-  
-  getch();
-  cleardevice();
-  closegraph();
-  
+  ReadKey();
+
+  CloseGraph();
 end.
 ```
 
@@ -42,8 +41,14 @@ end.
 
 Embarcadero Delphi compiler - 
 ```
-dcc64 -B -U../ fonts.pas
+dcc64 -B -U.. exus.pas
 ```
+
+Free Pascal compiler - 
+```
+fpc -B -Fu.. exus.pas
+```
+
 ## Screenshots
 
 fonts

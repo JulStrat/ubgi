@@ -1,25 +1,24 @@
 program exus;
 {$IF Defined(FPC)}{$MODE Delphi}{$ENDIF}
+{$APPTYPE Console}
+
 uses ubgi;
 
 var
   gd, gm: Integer;
   info: String;
 
-begin  
-  gd := DETECT; gm := VGA;
-  
-  initgraph(gd, gm, '');
-  setcolor(BLUE);
-  setbkcolor(WHITE);
-  cleardevice();
+begin
+  gd := DETECT; gm := VGAHi;
+
+  InitGraph(gd, gm, '');
+  SetColor(BLUE);
+  SetBkColor(WHITE);
 
   info := 'SDL_bgi & Object Pascal';
-  settextstyle(BOLDFONT, HORIZDIR, 0);
+  SetTextStyle(SimplexFont, HorizDir, 0);
   OutText(info);
-  
-  getch();
-  cleardevice();
-  closegraph();
-  
+  ReadKey();
+
+  CloseGraph();
 end.

@@ -132,9 +132,9 @@ var
   t_tmp_heading: Integer;            // saved turtle heading
 
   t_show_turtle: Integer;            // draw the turtle?
-  t_pen_down: Integer;               // draw?
+  t_pen_down: Boolean;               // draw?
   t_turtle_drawn: Integer;           // has the turtle been drawn?
-  t_turtle_wrap: Integer;            // wrap around the window?
+  t_turtle_wrap: Boolean;            // wrap around the window?
   t_turtle_size: Integer;            // turtle size in pixels
   t_turtle_shape: Integer;           // turtle size in pixels
 
@@ -386,14 +386,14 @@ begin
     draw_turtle (); // delete previous
   
   // should we draw?
-  if t_pen_down <> 0 then
+  if t_pen_down then
     line (t_pos[0], t_pos[1], t_pos[0] + newx, t_pos[1] - newy);
 
   Inc(t_pos[0], newx);
   Dec(t_pos[1], newy);
   
   // is wrapping active?
-  if t_turtle_wrap <> 0 then
+  if t_turtle_wrap then
   begin  
     if t_pos[0] < 0 then
       t_pos[0] := getmaxx () + t_pos[0];
@@ -474,12 +474,12 @@ end;
 
 procedure PenDown ();
 begin
-  t_pen_down := T_TRUE;
+  t_pen_down := TRUE;
 end;
 
 procedure PenUp ();
 begin
-  t_pen_down := T_FALSE;
+  t_pen_down := FALSE;
 end;
 
 procedure TurtleShape (shape: Integer);
@@ -511,12 +511,12 @@ end;
 
 procedure Wrap ();
 begin
-  t_turtle_wrap := T_TRUE;
+  t_turtle_wrap := TRUE;
 end;
 
 procedure NoWrap ();
 begin
-  t_turtle_wrap := T_FALSE;
+  t_turtle_wrap := FALSE;
 end;
 
 initialization
@@ -525,9 +525,9 @@ initialization
   t_tmp_pos[1] := -1;  
   t_tmp_heading := 0;
   t_show_turtle := T_FALSE;
-  t_pen_down := T_TRUE;
+  t_pen_down := TRUE;
   t_turtle_drawn := T_TRUE;
-  t_turtle_wrap := T_FALSE;
+  t_turtle_wrap := FALSE;
   t_turtle_size := 21;
   t_turtle_shape := T_TRIANGLE;
 

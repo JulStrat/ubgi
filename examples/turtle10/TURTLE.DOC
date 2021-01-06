@@ -1,0 +1,172 @@
+File name               : TURTLE10.ZIP
+One line description    : unit that allows turtle graphics in any BGI mode
+Author or company       : Dr Patrick L.Pollet
+Email address           : ppollet@cismibm.univ-lyon1.fr
+Surface address         : Institut National des Sciences Appliqu‚es
+                          Centre informatique du 1er Cycle    Bat 110
+                          20 avenue A.Einstein
+                          69621  Villeurbanne Cedex France
+Special requirements    :EGA card minimum
+Shareware payment required from private users     : None
+Shareware payment required from corporates        : None
+Demo:        No
+Nagware: No
+Self-documenting:  Hopefully
+External documentation included:  yes
+Source included:   yes
+Size: 30150 bytes (Zipped Pkzip 1.10)
+
+10 lines description:
+    This unit allows to re-use the Turtle graphics calls in
+any graphic mode supported by a BGI driver
+    This unit exports all turtle graphics calls present in
+TurboPascal V3.0 and in compatibility unit Graph3 provided
+with subsequent versions.
+    The HiRes and Graphmode calls are not supported  and were
+replaced by more general calls
+(GraphOn,GraphOff) to accept all standard graphic modes and
+drivers.
+
+
+Long description:
+
+TURTLE  version 1.1e  Unit that allows turtle graphics in any BGI mode
+
+  Copyright (c) P.Pollet 1991,1992
+  Portions of SVGA handling copyright (c) 1992 J.P.Hardgrave
+  Procedures and Functions names (c) Borland Int'l  1987-1992
+
+This unit is hereby donated to the public domain provided:
+    - the copyright notices are not removed nor modidied.
+    - proper citation of authors is made upon usage in other packages
+    - the archive contents is not modified
+
+Please report all problems, bugs, suggested modifications to the author
+
+Dr Patrick L.Pollet     ppollet@cismibm.univ-lyon1.fr
+Institut National des Sciences Appliqu‚es
+Centre informatique du 1er Cycle    Bat 110
+20 avenue A.Einstein
+69621  Villeurbanne Cedex France
+
+Archive contents:
+
+TURTLE   DOC      This file
+DRAGRECT PAS      2411 14.12.92   10:17Demo program Clover dragon
+FOREST   PAS      3737 14.12.92   10:44Demo program draw a nice forest
+NICETREE PAS      3124 14.12.92   10:45Demo program Draw a nice tree
+SVGA     INI      3192 14.12.92   10:31Include file to use SVGA.BGI
+SVGAREG  DOC      3122 14.12.92   10:27Registration form for SVGA.BGI
+SVGA256  BGI      6335 09.09.92    9:11SVGA.BGI driver (C) J.Hardgrave
+TREEREC  PAS      1539 14.12.92    9:55Demo program Regular trees
+TURTLE   PAS     24153 14.12.92   10:30Source code unit Turtle
+TURTLEDM PAS      4576 14.12.92   10:05Demo program Play with turtle
+VONKOCH  PAS      1977 14.12.92   10:29Demo program Von Koch SnowFlake
+
+
+Why did I wrote that unit ?
+
+    Do you remember that little turtle with a pen at the tail
+that was the main feature of the Logo language ? A toy to
+learn computers to kids ??? Well not so...
+
+    For my fellow teachers in C.S., turtle graphics are an
+exellent introduction to recursion , with  quite attractive
+visual effects. Drawing "dragon curves " (Von Koch snowflake,
+Peano's curves...) is so natural with this little friendly
+animal....
+
+    Another application is in the representation of 2D shapes
+by relative motions of the turtle  ; that by a couple (
+distance, angle ) from a previous point.  This makes the
+manipulation of the shape much easier than with the standard
+cartesian coordinates representation.  A translation just
+requires changing the starting point of the drawing ;
+rotations can be obtained by changing the turtle heading and
+zooming is done by changing the pixel/distance ratio for the
+turtle motions.  Nearly no trigonometric calculations are
+required to transform a shape ...
+
+    Borland had introduced  turtle graphics with TurboPascal 3.
+In the subsequent versions, a compatibilt unit, TURBO3 was
+provided but, even with version 6, it can only do turtle
+graphics in the old CGA graphic modes !!! Quite desappointing
+at the era of SVGA boards....
+
+    This  unit , TURTLE.PAS  make possible the use of a turtle
+with any graphic mode supported by the Graph unit.  whether it
+is a standard graphic mode (EGAVGA,HERC,IBM8570..) or a user
+written BGI driver such at the remarkable shareware SVGA
+drivers written by .......
+
+    To allow a nearly direct recompilation of previous
+programs, the entries points are identical , in names and
+parameters with the Turbo3 unit interface.
+
+technical notes:
+
+    This unit has been tested with all  BGI drivers supplied
+by Borland Int'l in Turbopascal packages version 5.5  and 6.
+
+    User installed BGI drivers were tested only with SVGA.BGI
+driver of J.P.Hardgrave.
+
+    The source code is self-documented.
+
+    Since turtle graphics are done using the LineTo,moveTo
+calls to GRAPH, the current point of the graph unit is
+synchronized with the turle position. It is therfore possible
+to mix turtle graphics and standard BGI graphics. However,
+since the turtle is drawn in XOR mode, if a BGI drawn line
+cross the turtle image between two moves of the turtle, the
+screen image at the turtle previous position  will not be
+correctly redrawn   The problem is similar to the handling of
+a mouse in text or graphic mode. One has to hide the turtle
+before any screen access  and to show it back later.
+
+ We have tried to make this transparent as follow:
+
+To make the Graph unit "turtle-aware ", our solution is to
+redefine in the TURTLE unit all screen accessing BGI calls .
+Each BGI call has exactly the same name and parmeter that the
+original call and simply hides the turtle before calling the
+entry point in the Graph unit and show again the turtle upon
+return.
+
+   as a exemple the procedure LineTo is redefined as follow :
+
+      Procedure LineTo (X,Y:integer);
+       begin
+        _HideTurtle;       (* Hide turtle if visible *)
+        Graph.lineTo(X,Y); (* call the original BGI driver d'ont
+                              forget the Graph. qualifier !!!*)
+        _ShowTurtle;       (* show turtle if was  visible *)
+       end;
+
+           With  subsequent versions of the GRAPH unit, you
+may have to include in the TURTLE unit similar redefinitions
+of new screen drawing calls.
+
+    For this  redefinition to work you *must make sure * that
+the TURTLE unit is cited *after* the GRAPH unit in the USES
+clauses of your client programs.
+
+
+    In the initialization process , we redefine the EGAVGA
+palette for a better rendition of the 16 colors. With others
+drivers, you may have to adjust the content of the typed
+contant EGAPALETTE.
+
+    To allow "faster trigonometric calculations " we used a
+table look up of sines between 0 and 359 degrees. This table
+was produced but printing to a text file the result of
+10000*Sin(A/PI*180) and subsequent editing.
+
+
+A ThinkPascal version (for MacIntosh with BW  Quickdraw calls
+) is available from the author and could be also placed in the
+public domain if enough requests are made....
+
+
+
+
