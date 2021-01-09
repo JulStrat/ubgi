@@ -223,6 +223,14 @@ const
   MaxColors = 15;
   (* Blink = 128; *)
 
+(* ARGB colours, set by COLOR () *)
+const
+  ARGB_FG_COL = 16;
+  ARGB_BG_COL = 17;
+  ARGB_FILL_COL = 18;
+  ARGB_TMP_COL = 19;
+  TMP_COLORS = 4;
+
 (* line style, thickness, and drawing mode *)
 const
   NormWidth = 1;
@@ -259,7 +267,7 @@ const
 (* graphics modes. Expanded from the original GRAPHICS.H *)
 const
   DETECT = -1;
-  grOk = 0; grError = -11; SDL = 0;
+  SDL = 0;
   (* all modes @ 320x200 *)
   SDL_320x200 = 1; SDL_CGALO = 1; CGA = 1; CGAC0 = 1; CGAC1 = 1;
   CGAC2 = 1; CGAC3 = 1; MCGAC0 = 1; MCGAC1 = 1; MCGAC2 = 1;
@@ -289,6 +297,46 @@ const
   SDL_1366x768 = 11; SDL_WXGA = 11;
   (* SDL_1920x1080 = XX, other *)
   SDL_USER = 12; SDL_FULLSCREEN = 13;
+
+(* BGI error constants *)
+const
+  (* No error. *)
+  grOk = 0;
+  (* (BGI) graphics not installed (use InitGraph). *)
+  grNoInitGraph = -1;
+  (* Graphics hardware not detected. *)
+  grNotDetected = -2;
+  (* Device driver file not found. *)
+  grFileNotFound = -3;
+  (* Invalid device driver file. *)
+  grInvalidDriver = -4;
+  (* Not enough memory to load driver. *)
+  grNoLoadMem = -5;
+  (* Out of memory in scan fill. *)
+  grNoScanMem = -6;
+  (* Out of memory in flood fill. *)
+  grNoFloodMem = -7;
+  (* Font file not found. *)
+  grFontNotFound = -8;
+  (* Not enough memory to load font. *)
+  grNoFontMem = -9;
+  (* Invalid graphics mode for selected driver. *)
+  grInvalidMode = -10;
+  (* Graphics error (generic error); there is no room in
+     the font table to register another font. (The font
+     table holds up to 10 fonts, and only 4 are
+     provided, so this error should not occur.)
+  *)
+  grError = -11;
+  (* Graphics I/O error. *)
+  grIOerror = -12;
+  (* Invalid font file; the font header isn't recognized. *)
+  grInvalidFont = -13;
+  (* Invalid font number; the font number in the font
+     header is not recognized
+  *)
+  grInvalidFontNum = -14;
+  grInvalidVersion = -18;
 
 (*
 // libXbgi compatibility
