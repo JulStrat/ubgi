@@ -4,9 +4,9 @@ Object Pascal bindings for [SDL_bgi](http://libxbgi.sourceforge.net) library.
 
 Repository structure - 
 - `ubgi.pas` - Pascal API unit.
-- `bin` - Dynamic Windows libraries v2.4.2.
+- `bin` - Dynamic Windows libraries v2.4.3.
 - `examples` - Pascal port of some original examples.
-- `include` - C API v2.4.2 header file.
+- `include` - C API v2.4.3 header file.
 
 ## Usage example
 
@@ -51,22 +51,22 @@ fpc -B -Fu.. exus.pas
 
 ## Screenshots
 
-fonts
+### fonts
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/fonts.png">
 
-plasma
+### plasma
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/plasma.png">
 
-psychedelia
+### psychedelia
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/psychedelia.png">
 
-kaleido
+### kaleido
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/kaleido.png">
 
-turtledemo
+### turtledemo
 
 <img src="https://github.com/JulStrat/ubgi/blob/master/examples/turtledemo.png">

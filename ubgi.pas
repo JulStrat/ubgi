@@ -4,7 +4,7 @@
   https://github.com/JulStrat/ubgi
 
   SDL_bgi - Borland Graphics Library implementation based on SDL2.@br
-  Copyright (C) 2014-2020 Guido Gonzato, PhD <guido.gonzato@gmail.com>@br
+  Copyright (C) 2014-2021 Guido Gonzato, PhD <guido.gonzato@gmail.com>@br
   http://libxbgi.sourceforge.net/
 
   This file is distributed under the ZLib License.
@@ -49,7 +49,7 @@ const
   YEAH = 1;
 
 const
-  SDL_BGI_VERSION = '2.4.2';
+  SDL_BGI_VERSION = '2.4.3';
   UBGI_VERSION = '0.3.1';
 
   BGI_WINTITLE_LEN = 512;

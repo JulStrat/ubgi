@@ -7,7 +7,7 @@
 // By Guido Gonzato, PhD
 // Automatic refresh patch, CHR font support:
 // Marco Diego Aurélio Mesquita
-// November 4, 2020
+// Latest update: February 24, 2021
 
 // ZLib License
 
@@ -47,7 +47,7 @@ freely, subject to the following restrictions:
 #include <math.h>    // for sin(), cos()
 #include <string.h>  // for strlen(), memcpy()
 
-#define SDL_BGI_VERSION 2.4.2
+#define SDL_BGI_VERSION 2.4.3
 
 enum { NOPE, YEAH } ;
 #define BGI_WINTITLE_LEN 512 // more than enough
@@ -302,9 +302,8 @@ struct linesettingstype {
 };
 
 struct palettetype {
-  unsigned char size;
-  // signed char in Turbo C / Borland C++
-  Uint32 colors[MAXCOLORS + 1];
+  Uint32 size;                  // unsigned char in Turbo C / Borland C++
+  Uint32 colors[MAXCOLORS + 1]; // signed char in Turbo C / Borland C++
 };
 
 struct textsettingstype {
