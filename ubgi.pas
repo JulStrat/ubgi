@@ -49,8 +49,8 @@ const
   YEAH = 1;
 
 const
-  SDL_BGI_VERSION = '2.4.3';
-  UBGI_VERSION = '0.3.1';
+  SDL_BGI_VERSION = '2.6.0';
+  UBGI_VERSION = '0.3.2';
 
   BGI_WINTITLE_LEN = 512;
   (* number of concurrent windows that can be created *)
@@ -1286,7 +1286,7 @@ procedure WriteImageFile(
   If an SDL_QUIT event occurs, QUIT is returned.
 *)
 function KbHit(): Integer;
-  cdecl; external LIB_UBGI name LIB_FNPFX + 'kbhit';
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'bgi_kbhit';
 
 (*
   Returns 1 when any key is pressed, including special keys
