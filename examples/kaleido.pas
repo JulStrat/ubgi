@@ -131,7 +131,8 @@ begin
       n := 0;
 
       if event() <> 0 then
-        stop := YEAH;
+        if SDL_QUIT = eventtype () then
+          stop := YEAH;
     end;
   end;
 

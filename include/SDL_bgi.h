@@ -1,20 +1,23 @@
 // SDL_bgi.h	-*- C -*-
 
-// SDL_bgi is a multiplatform, SDL2-based GRAPHICS.H implementation.
+// SDL_bgi is a graphics library (GRAPHICS.H) for C, C++, WebAssembly,
+// and Python. It's based on SDL2 and it's portable on many platforms.
 // Easy to use, pretty fast, useful for porting old programs
 // and for teaching introductory computer graphics.
 //
 // By Guido Gonzato, PhD
 // Automatic refresh patch, CHR font support:
 // Marco Diego Aurélio Mesquita
-// Latest update: February 24, 2021
+// Latest update: December 12, 2022
 
 // ZLib License
 
 /*
 
+Copyright (c) 2014-2022 Guido Gonzato, PhD
+
 This software is provided 'as-is', without any express or implied
-warranty.  In no event will the authors be held liable for any damages
+warranty. In no event will the authors be held liable for any damages
 arising from the use of this software.
 
 Permission is granted to anyone to use this software for any purpose,
@@ -41,13 +44,17 @@ freely, subject to the following restrictions:
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_mouse.h>
-
 #include <stdio.h>   // for fprintf()
+#include <stdint.h>  // for uint* types
 #include <stdlib.h>  // for exit(), calloc()
 #include <math.h>    // for sin(), cos()
 #include <string.h>  // for strlen(), memcpy()
 
-#define SDL_BGI_VERSION 2.4.3
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+#define SDL_BGI_VERSION 3.0.0
 
 enum { NOPE, YEAH } ;
 #define BGI_WINTITLE_LEN 512 // more than enough
@@ -61,7 +68,8 @@ enum { NOPE, YEAH } ;
 extern SDL_Window   *bgi_window;
 extern SDL_Renderer *bgi_renderer;
 extern SDL_Texture  *bgi_texture;
-extern Uint32        PALETTE_SIZE;
+// !!! deprecated! Use getpalettesize() instead.
+// extern Uint32        PALETTE_SIZE;
 
 // available visual pages
 
@@ -115,7 +123,7 @@ enum {
   MAXCOLORS    = 15
 };
 
-// ARGB colours, set by COLOR ()
+// ARGB colours, set by COLOR (), COLOR32 (), and RGBPALETTE ()
 
 enum {
   ARGB_FG_COL   = 16,
@@ -136,20 +144,40 @@ enum { COPY_PUT, XOR_PUT, OR_PUT, AND_PUT, NOT_PUT };
 // fill styles
 
 enum {
-  EMPTY_FILL, SOLID_FILL, LINE_FILL, LTSLASH_FILL, SLASH_FILL,
-  BKSLASH_FILL, LTBKSLASH_FILL, HATCH_FILL, XHATCH_FILL,
-  INTERLEAVE_FILL, WIDE_DOT_FILL, CLOSE_DOT_FILL, USER_FILL
+  EMPTY_FILL,       // fills area in background color
+  SOLID_FILL,       // fills area in solid fill color
+  LINE_FILL,        // --- fill
+  LTSLASH_FILL,     // /// fill
+  SLASH_FILL,       // /// fill with thick lines
+  BKSLASH_FILL,     // \\\ fill with thick lines
+  LTBKSLASH_FILL,   // \\\ fill
+  HATCH_FILL,       // light hatch fill
+  XHATCH_FILL,      // heavy cross hatch fill
+  INTERLEAVE_FILL,  // interleaving line fill
+  WIDE_DOT_FILL,    // Widely spaced dot fill
+  CLOSE_DOT_FILL,   // Closely spaced dot fill
+  USER_FILL         // user defined fill
 };
 
-// mouse buttons
+// mouse events - compatible with WinBGIm
 
-#define WM_LBUTTONDOWN  SDL_BUTTON_LEFT
-#define WM_MBUTTONDOWN  SDL_BUTTON_MIDDLE
-#define WM_RBUTTONDOWN  SDL_BUTTON_RIGHT
-#define WM_WHEEL        SDL_MOUSEWHEEL
-#define WM_WHEELUP      SDL_USEREVENT
-#define WM_WHEELDOWN    SDL_USEREVENT + 1
-#define WM_MOUSEMOVE    SDL_MOUSEMOTION
+#define WM_MOUSEMOVE       SDL_MOUSEMOTION
+
+#define WM_LBUTTONDOWN     SDL_BUTTON_LEFT
+#define WM_LBUTTONUP       SDL_MOUSEBUTTONUP   + SDL_BUTTON_LEFT
+#define WM_LBUTTONDBLCLK   SDL_MOUSEBUTTONDOWN + SDL_BUTTON_LEFT + 2
+
+#define WM_MBUTTONDOWN     SDL_BUTTON_MIDDLE
+#define WM_MBUTTONUP       SDL_MOUSEBUTTONUP   + 10*SDL_BUTTON_MIDDLE
+#define WM_MBUTTONDBLCLK   SDL_MOUSEBUTTONDOWN + 10*SDL_BUTTON_MIDDLE + 2
+
+#define WM_RBUTTONDOWN     SDL_BUTTON_RIGHT
+#define WM_RBUTTONUP       SDL_MOUSEBUTTONUP   + 20*SDL_BUTTON_RIGHT
+#define WM_RBUTTONDBLCLK   SDL_MOUSEBUTTONDOWN + 20*SDL_BUTTON_RIGHT + 2
+
+#define WM_WHEEL           SDL_MOUSEWHEEL
+#define WM_WHEELUP         SDL_BUTTON_RIGHT + 1
+#define WM_WHEELDOWN       SDL_BUTTON_RIGHT + 2
 
 // keys
 #define KEY_HOME        SDLK_HOME
@@ -302,8 +330,14 @@ struct linesettingstype {
 };
 
 struct palettetype {
-  Uint32 size;                  // unsigned char in Turbo C / Borland C++
-  Uint32 colors[MAXCOLORS + 1]; // signed char in Turbo C / Borland C++
+  unsigned char size;
+  Uint32 colors[MAXCOLORS + 1];
+};
+
+// SDL_bgi extension
+struct rgbpalettetype {
+  Uint32 size;
+  Uint32 *colors;
 };
 
 struct textsettingstype {
@@ -323,7 +357,7 @@ struct viewporttype {
 };
 
 // prototypes - standard BGI
-// make them C++ compatible
+// let's make them C++ compatible
 
 #ifdef __cplusplus
 extern "C" {
@@ -348,7 +382,7 @@ void getarccoords (struct arccoordstype *);
 void getaspectratio (int *, int *);
 int  getbkcolor (void);
 int  bgi_getch (void);
-// circumvents Mingw bug
+// for Msys / Mingw64
 #define getch bgi_getch
 int  getcolor (void);
 struct palettetype
@@ -382,7 +416,10 @@ unsigned
 void initgraph (int *, int *, char *);
 int  installuserdriver (char *, int (*)(void));
 int  installuserfont (char *);
-int  kbhit (void);
+int  bgi_kbhit (void);
+// fix for MSYS / Mingw64
+#define kbhit k_bhit
+int  lastkey (void);
 void line (int, int, int, int);
 void linerel (int, int);
 void lineto (int, int);
@@ -394,7 +431,6 @@ void pieslice (int, int, int, int, int);
 void putimage (int, int, void *, int);
 void putpixel (int, int, int);
 #define random(range) (rand() % (range))
-void readimagefile (char *, int, int, int, int);
 void rectangle (int, int, int, int);
 int  registerbgidriver (void (*)(void));
 int  registerbgifont (void (*)(void));
@@ -420,7 +456,6 @@ void setvisualpage (int);
 void setwritemode (int);
 int  textheight (char *);
 int  textwidth (char *);
-void writeimagefile (char *, int, int, int, int);
 
 // SDL_bgi extensions
 
@@ -429,41 +464,54 @@ int  BLUE_VALUE (int);
 void closewindow (int);
 int  COLOR (int, int, int);
 int  COLOR32 (Uint32);
+char *colorname (int);
 #define colorRGB(r,g,b)  0xff000000 | ((r) << 16) | ((g) << 8) | (b)
-int edelay (int);
+void copysurface (SDL_Surface *, int, int, int, int);
+int doubleclick (void);
+int  edelay (int);
 int  event (void);
 int  eventtype (void);
-// void freeimage (void *);
+void fputpixel (int, int);
 void getbuffer (Uint32 *);
+int  getclick (void);
 int  getcurrentwindow (void);
 void getleftclick (void);
 int  getevent (void);
+void getleftclick (void);
 void getlinebuffer (int, Uint32 *);
 int  getmaxheight (void);
 int  getmaxwidth (void);
 void getmiddleclick (void);
 void getmouseclick (int, int *, int *);
+void getrgbpalette (struct rgbpalettetype *, int);
+int  getrgbpalettesize (void);
 void getrightclick (void);
 void getscreensize (int *, int *);
+#define getwindowwidth  getmaxx
+#define getwindowheight getmaxy
 int  GREEN_VALUE (int);
 void initpalette (void);
-void initwindow (int, int);
+int  initwindow (int, int);
 int  IS_BGI_COLOR (int color);
 int  ismouseclick (int);
 int  IS_RGB_COLOR (int color);
+int  kdelay (int);
 int  mouseclick (void);
 int  mousex (void);
 int  mousey (void);
 void putbuffer (Uint32 *);
 void putlinebuffer (int, Uint32 *);
-void _putpixel (int, int);
+#define _putpixel fputpixel
 int  RED_VALUE (int );
+int  RGBPALETTE (int);
+void readimagefile (char *, int, int, int, int);
 void refresh (void);
 void resetwinoptions (int, char *, int, int);
-void resizepalette (Uint32);
+int  resizepalette (Uint32);
 void sdlbgiauto (void);
 void sdlbgifast (void);
 void sdlbgislow (void);
+void setallrgbpalette (struct rgbpalettetype *);
 void setalpha (int, Uint8);
 void setbkrgbcolor (int);
 void setblendmode (int);
@@ -475,8 +523,11 @@ void setwintitle (int, char *);
 void showinfobox (const char *);
 void showerrorbox (const char *);
 void swapbuffers (void);
-int  xkbhit (void);
-
+void writeimagefile (char *, int, int, int, int);
+int  xkb_hit (void);
+// fix for for MSYS / Mingw64 bug
+#define xkbhit xkb_hit
+  
 #ifdef __cplusplus
 }
 #endif

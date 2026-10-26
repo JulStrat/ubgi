@@ -50,7 +50,7 @@ const
 
 const
   SDL_BGI_VERSION = '3.0.0';
-  UBGI_VERSION = '0.3.3';
+  UBGI_VERSION = '0.3.4';
 
   BGI_WINTITLE_LEN = 512;
   (* number of concurrent windows that can be created *)
@@ -65,17 +65,29 @@ const
   SDL_BUTTON_MIDDLE = 2;
   SDL_BUTTON_RIGHT = 3;
   SDL_MOUSEMOTION = $400;
+  SDL_MOUSEBUTTONDOWN = SDL_MOUSEMOTION + 1;
+  SDL_MOUSEBUTTONUP = SDL_MOUSEMOTION + 2;
   SDL_MOUSEWHEEL = SDL_MOUSEMOTION + 3;
   SDL_USEREVENT = $8000;
 
 const
-  WM_LBUTTONDOWN = SDL_BUTTON_LEFT;
-  WM_MBUTTONDOWN = SDL_BUTTON_MIDDLE;
-  WM_RBUTTONDOWN = SDL_BUTTON_RIGHT;
-  WM_WHEEL = SDL_MOUSEWHEEL;
-  WM_WHEELUP = SDL_USEREVENT;
-  WM_WHEELDOWN = SDL_USEREVENT + 1;
   WM_MOUSEMOVE = SDL_MOUSEMOTION;
+
+  WM_LBUTTONDOWN = SDL_BUTTON_LEFT;
+  WM_LBUTTONUP = SDL_MOUSEBUTTONUP + SDL_BUTTON_LEFT;
+  WM_LBUTTONDBLCLK = SDL_MOUSEBUTTONDOWN + SDL_BUTTON_LEFT + 2;
+
+  WM_MBUTTONDOWN = SDL_BUTTON_MIDDLE;
+  WM_MBUTTONUP = SDL_MOUSEBUTTONUP + 10 * SDL_BUTTON_MIDDLE;
+  WM_MBUTTONDBLCLK = SDL_MOUSEBUTTONDOWN + 10 * SDL_BUTTON_MIDDLE + 2;
+
+  WM_RBUTTONDOWN = SDL_BUTTON_RIGHT;
+  WM_RBUTTONUP = SDL_MOUSEBUTTONUP + 20 * SDL_BUTTON_RIGHT;
+  WM_RBUTTONDBLCLK = SDL_MOUSEBUTTONDOWN + 20 * SDL_BUTTON_RIGHT + 2;
+
+  WM_WHEEL = SDL_MOUSEWHEEL;
+  WM_WHEELUP = SDL_BUTTON_RIGHT + 1;
+  WM_WHEELDOWN = SDL_BUTTON_RIGHT + 2;
 
 (* keyboard handling *)
 const
@@ -381,6 +393,7 @@ type
   PFillSettingsType = ^FillSettingsType;
   PLineSettingsType = ^LineSettingsType;
   PPaletteType = ^PaletteType;
+  PRGBPaletteType = ^RGBPaletteType;
   PTextSettingsType = ^TextSettingsType;
   PViewPortType = ^ViewPortType;
 
@@ -416,7 +429,12 @@ type
 
   PaletteType = record
     size: Byte;
-    colors: array [0..15] of ShortInt;
+    colors: array [0..MaxColors] of UInt32;
+  end;
+
+  RGBPaletteType = record
+    size: UInt32;
+    colors: PUInt32;
   end;
 
   TextSettingsType = record
@@ -972,7 +990,36 @@ function RED_VALUE(
 *)
 procedure _PutPixel(
   x, y: Integer);
-  cdecl; external LIB_UBGI name LIB_FNPFX + '_putpixel';
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'fputpixel';
+
+procedure FPutPixel(
+  x, y: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'fputpixel';
+
+function ColorName(
+  color: Integer): PAnsiChar;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'colorname';
+
+function RGBPALETTE(
+  color: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'RGBPALETTE';
+
+procedure GetRGBPalette(
+  palette: PRGBPaletteType;
+  size: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getrgbpalette';
+
+function GetRGBPaletteSize(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getrgbpalettesize';
+
+procedure SetAllRGBPalette(
+  palette: PRGBPaletteType);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'setallrgbpalette';
+
+procedure CopySurface(
+  surface: Pointer;
+  x1, y1, x2, y2: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'copysurface';
 
 (* Closes the window whose identifier is id. *)
 procedure CloseWindow(
@@ -984,8 +1031,8 @@ procedure CloseWindow(
   is performed. If an event occurs during the delay, this function
   returns 1, otherwise 0. Use eventtype to get the last event.
 *)
-procedure EDelay(
-  milliSec: Integer);
+function EDelay(
+  milliSec: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'edelay';
 
 (*
@@ -1013,7 +1060,7 @@ procedure GetBuffer(
 (*
   Returns the integer id of the current window.
 *)
-procedure GetCurrentWindow();
+function GetCurrentWindow(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getcurrentwindow';
 
 (*
@@ -1028,6 +1075,20 @@ function GetEvent(): Integer;
 *)
 procedure GetLeftClick();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getleftclick';
+
+procedure GetRightClick();
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getrightclick';
+
+function GetClick(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getclick';
+
+function DoubleClick(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'doubleclick';
+
+procedure GetMouseClick(
+  kind: Integer;
+  var x, y: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmouseclick';
 
 (*
   Copies the y-th screen line to linebuffer,
@@ -1057,6 +1118,16 @@ function GetMaxHeight(): Integer;
 *)
 function GetMaxWidth(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxwidth';
+
+procedure GetScreenSize(
+  var x, y: Integer);
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getscreensize';
+
+function GetWindowWidth(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxx';
+
+function GetWindowHeight(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'getmaxy';
 
 (*
   Returns the code of the mouse button that was clicked,
@@ -1144,8 +1215,8 @@ procedure InitPalette ();
   The user must update the screen as needed using refresh(),
   or use sdlbgiauto().
 *)
-procedure InitWindow(
-  width, height: Integer);
+function InitWindow(
+  width, height: Integer): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'initwindow';
 
 (* Returns 1 if the 'kind' mouse button was clicked. *)
@@ -1162,13 +1233,10 @@ function ResizePalette (
   newSize: Uint32): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'resizepalette';
 
-(*
-NOT IMPLEMENTED
 procedure SetWinTitle(
   id: Integer;
   title: PAnsiChar);
   cdecl; external LIB_UBGI name LIB_FNPFX + 'setwintitle';
-*)
 
 (*
   Triggers automatic screen refresh.
@@ -1266,7 +1334,7 @@ procedure ShowInfoBox(
   cdecl; external LIB_UBGI name LIB_FNPFX + 'showinfobox';
 
 (* Swaps the current active and the current visual graphics pages. *)
-function SwapBuffers(): Integer;
+procedure SwapBuffers();
   cdecl; external LIB_UBGI name LIB_FNPFX + 'swapbuffers';
 
 (*
@@ -1295,6 +1363,13 @@ function KbHit(): Integer;
 *)
 function XKbHit(): Integer;
   cdecl; external LIB_UBGI name LIB_FNPFX + 'xkb_hit';
+
+function LastKey(): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'lastkey';
+
+function KDelay(
+  msec: Integer): Integer;
+  cdecl; external LIB_UBGI name LIB_FNPFX + 'kdelay';
 
 (* TP7 declaration (Crt unit): function KeyPressed: Boolean; *)
 function KeyPressed(): Boolean; inline;
